@@ -1,0 +1,35 @@
+---
+- name: Check OS version and update
+  hosts: all
+  become: true
+  vars_files:
+    - vars/vault.yml
+  tasks:
+    - name: Check OS
+      block:
+        - name: Check if Ubuntu
+          set_fact:
+            os_type: ubuntu
+          when: "'Ubuntu' in ansible_distribution"
+        - name: Check if Rocky Linux
+          set_fact:
+            os_type: rocky
+          when: "'Rocky' in ansible_distribution"
+
+      # Fail if OS is not supported
+      rescue:
+        - fail:
+            msg: "Unsupported OS '{{ ansible_distribution }}'"
+
+    - name: Update packages
+      block:
+        - name: Update Ubuntu
+          apt:
+            update_cache: yes
+            upgrade: dist
+          when: os_type == 'ubuntu'
+        - name: Update Rocky Linux
+          yum:
+            name: '*'
+            state: latest
+          when: os_type == 'rocky'

@@ -1,0 +1,9 @@
+---
+- hosts: raspilab
+  become: true
+  become_user: root
+  tasks:
+    - name: Reboot all boxes
+      reboot:
+
+

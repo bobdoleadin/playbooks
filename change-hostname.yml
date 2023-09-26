@@ -1,0 +1,8 @@
+- hosts: raspilab
+  tasks:
+    - pause:
+        prompt: "Specify hostname for {{ inventory_hostname }}?"
+        echo: yes
+      register: result
+    - set_fact:
+        host: "{{ result.user_input }}" 

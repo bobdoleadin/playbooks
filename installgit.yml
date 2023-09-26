@@ -1,0 +1,19 @@
+---
+- name: Install Git
+  hosts: all
+  become: true
+  vars_files:
+    - vars/vault.yml
+  tasks:
+    - name: Install Git on Ubuntu
+      apt:
+        name: git
+        state: present
+      when: ansible_facts['distribution'] == 'Ubuntu'
+
+    - name: Install Git on Red Hat
+      yum:
+        name: git
+        state: present
+      when: ansible_facts['distribution'] == 'RedHat' or ansible_facts['distribution'] == 'Rocky'
+
