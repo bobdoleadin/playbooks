@@ -11,13 +11,26 @@
           - scap-security-guide
         state: present
 
-    - name: Copy the Fedora SCAP profile to target
-      copy:
-        src: /etc/ansible/playbooks/ssg-fedora-ds.xml
-        dest: /tmp/ssg-fedora-ds.xml
-        mode: '0644'
+    - name: Ensure the file exists (optional)
+      stat:
+        path: /ssg-fedora-ds.xml
+      register: result
 
+    - name: Fail if file does not exist (optional)
+      fail:
+        msg: "The file is not present on the destination host!"
+      when: not result.stat.exists
+
+    - name: Use the file
+      some_module:
+        file_path: /ssg-fedora-ds.xml
+       
     - name: Run OpenSCAP scan
       command:
         cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_standard --results /tmp/scan-results.xml /tmp/ssg-fedora-ds.xml
+register: scan_results
+
+    - name: Display the scan results
+      debug:
+        var: scan_results.stdout_lines
 
