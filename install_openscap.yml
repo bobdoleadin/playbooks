@@ -21,14 +21,16 @@
         msg: "The file is not present on the destination host!"
       when: not result.stat.exists
 
-    - name: Use the file
-      some_module:
-        file_path: /ssg-fedora-ds.xml
-       
+    # If you have some module to use the file, include it here. 
+    # Otherwise, the below task is just a placeholder.
+    # - name: Use the file
+    #   your_module_here:
+    #     file_path: /ssg-fedora-ds.xml
+
     - name: Run OpenSCAP scan
       command:
         cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_standard --results /tmp/scan-results.xml /tmp/ssg-fedora-ds.xml
-	register: scan_results
+      register: scan_results
 
     - name: Display the scan results
       debug:
