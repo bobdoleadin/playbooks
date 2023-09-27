@@ -29,7 +29,7 @@
 
     - name: Run OpenSCAP scan
       command:
-        cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_standard --results /tmp/scan-results.xml /tmp/ssg-fedora-ds.xml
+        cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_standard --results /scan-results.xml /ssg-fedora-ds.xml
       register: scan_results
 
     - name: Display the scan results
