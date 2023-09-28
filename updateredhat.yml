@@ -1,6 +1,6 @@
 ---
 - name: Update the AWX Host (not the container)
-  hosts: awx_host  # Assuming you have defined this host in your inventory.
+  hosts: 192.168.1.91  # Assuming you have defined this host in your inventory.
   become: yes      # To gain sudo access for updates.
   vars_files:
     - /etc/ansible/playbooks/vars/vault.yml  # Pointing to your vault file.
