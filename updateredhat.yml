@@ -1,0 +1,27 @@
+---
+- name: Update the AWX Host (not the container)
+  hosts: awx_host  # Assuming you have defined this host in your inventory.
+  become: yes      # To gain sudo access for updates.
+  vars_files:
+    - /etc/ansible/playbooks/vars/vault.yml  # Pointing to your vault file.
+
+  tasks:
+    - name: Ensure all packages are updated
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Ensure the kernel is updated
+      yum:
+        name: 'kernel'
+        state: latest
+
+    - name: Restart the host if needed (Optional)
+      reboot:
+        msg: "Rebooting due to system updates"
+        connect_timeout: 5
+        reboot_timeout: 600
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+      when: ansible_os_family == 'RedHat'
+
