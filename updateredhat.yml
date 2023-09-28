@@ -16,12 +16,12 @@
         name: 'kernel'
         state: latest
 
-    - name: Restart the host if needed (Optional)
-      reboot:
-        msg: "Rebooting due to system updates"
-        connect_timeout: 5
-        reboot_timeout: 600
-        pre_reboot_delay: 0
-        post_reboot_delay: 30
+    #- name: Restart the host if needed (Optional)
+    #  reboot:
+    #    msg: "Rebooting due to system updates"
+    #    connect_timeout: 5
+    #    reboot_timeout: 600
+    #    pre_reboot_delay: 0
+    #    post_reboot_delay: 30
       when: ansible_os_family == 'RedHat'
 
