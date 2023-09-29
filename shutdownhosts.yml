@@ -6,12 +6,12 @@
     - /etc/ansible/playbooks/var/vault.yml  # Ensure you specify the correct path to your vault.yml
 
   tasks:
-    - name: Ensure we have correct privileges (optional check)
-      assert:
-        that:
-          - "'{{ ansible_user }}' == 'root'"
-        fail_msg: "This playbook requires root privileges"
-      run_once: true
+  #  - name: Ensure we have correct privileges (optional check)
+  #    assert:
+  #      that:
+  #        - "'{{ ansible_user }}' == 'root'"
+  #      fail_msg: "This playbook requires root privileges"
+  #    run_once: true
 
     - name: Shutdown all hosts
       command: "shutdown -h now"
