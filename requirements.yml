@@ -1,5 +1,5 @@
 collections:
   - name: redhat.rhel_system_roles
-    version: 1.22.0
+    version: latest
 
 
