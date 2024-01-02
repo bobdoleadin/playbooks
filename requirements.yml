@@ -1,0 +1,4 @@
+- src: https://github.com/bobdoleadin/playbooks.git
+  version: main
+  name: rhel-system-roles.storage
+
