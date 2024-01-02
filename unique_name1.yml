@@ -1,0 +1,43 @@
+---
+- name: Configure GRUB superuser and password
+  hosts: target_hosts  # Replace this with your target group or host
+  become: yes  # Ensure we have elevated privileges
+
+  vars_files:
+    - /etc/ansible/playbooks/vars/vault.yml  # Pointing to your vault file.
+
+  vars:
+    unique_superuser_name: someuniquestringhere
+
+  tasks:
+    - name: Ensure grub2-tools is installed (Red Hat based systems)
+      yum:
+        name: grub2-tools
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Configure unique superuser in grub config
+      blockinfile:
+        path: /etc/grub.d/01_users
+        block: |
+          set superusers="{{ unique_superuser_name }}"
+          export superusers
+          password_pbkdf2 {{ unique_superuser_name }} {{ grub2_password }}
+        create: yes
+        marker: "# {mark} ANSIBLE MANAGED BLOCK FOR GRUB SUPERUSER"
+
+    - name: Generate new grub.cfg
+      command: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+    - name: Set GRUB2 password for the superuser
+      command: grub2-setpassword
+      args:
+        creates: /boot/grub2/user.cfg  # Don't run if user.cfg already exists
+      register: grub2_password_result
+      ignore_errors: yes
+
+    - name: Prompt for GRUB2 superuser password
+      pause:
+        prompt: "Enter password for GRUB2 superuser"
+      when: "'FAILED' in grub2_password_result.msg"
+

@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  vars:
+    storage_volumes:
+      - name: barefs
+        type: disk
+        disks:
+          - sda
+        fs_type: xfs
+
+  tasks:
+    - name: Unmount disk if mounted
+      ansible.builtin.mount:
+        path: "/path/to/mount/point"
+        src: "/dev/sda1"
+        fstype: xfs
+        state: unmounted
+
+    - name: Run the rhel-system-roles.storage
+      include_role:
+        name: rhel-system-roles.storage
+
+    - name: Remount disk
+      ansible.builtin.mount:
+        path: "/path/to/mount/point"
+        src: "/dev/sda1"
+        fstype: xfs
+        state: mounted
