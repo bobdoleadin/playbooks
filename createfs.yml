@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars:
+    storage_volumes:
+      - name: barefs
+        type: disk
+        disks:
+          - sda
+        fs_type: xfs
+        mount_point: /mnt/data
+  roles:
+    - rhel-system-roles.storage
